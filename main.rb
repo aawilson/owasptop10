@@ -20,9 +20,14 @@ class CatchPhrase < Sinatra::Base
   end
 
   def set_logged_in_user
-    if params[:sessid]
-      @sessid = params[:sessid]
-      @user = Session.find_by_sessid(@sessid).user
+    if request.cookies['sessid']
+      @sessid = request.cookies['sessid']
+      session = Session.find_by_sessid(@sessid)
+      if session.nil?
+        response.set_cookie 'sessid', nil
+      else
+        @user = session.user
+      end
     end
   end
 
@@ -38,11 +43,14 @@ class CatchPhrase < Sinatra::Base
   end
 
   get '/dashboard' do
-    redirect to('/') if @user.nil?
+    if @user.nil?
+      flash[:notice] = "Woops, can't go there without being logged in."
+      redirect to('/') and return
+    end
     haml :dashboard
   end
 
-  get '/login' do
+  post '/login' do
     username = params[:username]
     password = params[:password]
 
@@ -51,7 +59,8 @@ class CatchPhrase < Sinatra::Base
     if user and user.password == password
       sessid = SecureRandom.hex(32)
       Session.create(:user => user, :sessid => sessid)
-      redirect to("/dashboard?sessid=#{sessid}") and return
+      response.set_cookie 'sessid', sessid
+      redirect to("/dashboard") and return
     end
 
     flash.now[:notice] =  "Sorry, username/password combination didn't match"
@@ -59,6 +68,7 @@ class CatchPhrase < Sinatra::Base
   end
 
   get '/logout' do
+    response.set_cookie 'sessid', nil
     redirect to('/')
   end
 

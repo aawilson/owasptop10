@@ -33,7 +33,7 @@
                 %a{:href => 'logout'} logout
                 )
             -else
-                %form{:action => "/login", :method => "get"}
+                %form{:action => "/login", :method => "post"}
                     %label{:for => 'username'} Username
                     %input#username{:name => 'username', :type => 'text'}
                     %label{:for => 'password'} Password
