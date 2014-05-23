@@ -1,0 +1,16 @@
+/ @results: #{@results.inspect}
+-if @results
+    %p
+        #{@username}'s catchphrases are:
+        %ul
+            - for result in @results
+                %li
+                    #{result[0]}
+
+%p
+    %h
+        Catchphrase Engine!
+%p
+    %form{:action => :get_catchphrases, :method => 'post'}
+        %input{:type => 'text', :name => 'username'}
+        %input{:type => 'submit', :value => 'Get Catchphrases!'}

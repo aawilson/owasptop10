@@ -1,0 +1,33 @@
+!!!
+%html
+    %head
+        %title
+            - if @title
+                @title
+            - else
+                Catchphrases!
+        :css
+            body #flash-notice {
+                color: green;
+                background-color: #dfffdf;
+            }
+            body .header {
+                font-size:smaller;
+                margin-bottom: 2em;
+            }
+            body .current-stats {
+                font-size:smaller;
+                color: darkgrey;
+            }
+
+    %body
+        .header
+            - unless flash[:notice].nil?
+                #flash-notice
+                    #{flash[:notice]}
+            - if @extra_header_content
+                =@extra_header_content
+
+        .content
+            = yield
+

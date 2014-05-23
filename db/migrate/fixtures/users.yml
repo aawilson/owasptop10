@@ -1,0 +1,20 @@
+wilson:
+    id: 1
+    username: wilson
+    birthdate: 01-27-1984
+    ssn: 555-55-5555
+    password: thisissosecret
+
+urkel:
+    id: 2
+    username: urkel
+    birthdate: 11-27-1976
+    ssn: 231-12-3211
+    password: ridinhighgettinlow
+
+seinfeld:
+    id: 3
+    username: seinfeld
+    birthdate: 04-29-1954
+    ssn: 124-512-5121
+    password: elainestilllovesme

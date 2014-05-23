@@ -1,0 +1,19 @@
+wilson_1:
+    id: 1
+    user_id: 1
+    catchphrase: It's a beautiful day!
+
+wilson_2:
+    id: 2
+    user_id: 1
+    catchphrase: That's gooood sweet tea!
+
+urkel_1:
+    id: 3
+    user_id: 2
+    catchphrase: Did I do thaaaat?
+
+seinfeld_1:
+    id: 4
+    user_id: 3
+    catchphrase: What is the deal with airline food?
