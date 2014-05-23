@@ -68,6 +68,8 @@ class CatchPhrase < Sinatra::Base
   end
 
   get '/logout' do
+    session = Session.find_by_sessid(request.cookies['sessid'])
+    session.destroy unless session.nil?
     response.set_cookie 'sessid', nil
     redirect to('/')
   end
