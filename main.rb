@@ -20,9 +20,8 @@ class CatchPhrase < Sinatra::Base
   end
 
   def set_logged_in_user
-    if params[:sessid]
-      @sessid = params[:sessid]
-      @user = Session.find_by_sessid(@sessid).user
+    if params[:userid]
+      @user = User.find_by_id(params[:userid].to_i)
     end
   end
 
@@ -49,9 +48,7 @@ class CatchPhrase < Sinatra::Base
     user = User.find_by_username(username)
 
     if user and user.password == password
-      sessid = SecureRandom.hex(32)
-      Session.create(:user => user, :sessid => sessid)
-      redirect to("/dashboard?sessid=#{sessid}") and return
+      redirect to("/dashboard?userid=#{user.id}") and return
     end
 
     flash.now[:notice] =  "Sorry, username/password combination didn't match"
