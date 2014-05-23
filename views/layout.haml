@@ -27,6 +27,18 @@
                     #{flash[:notice]}
             - if @extra_header_content
                 =@extra_header_content
+            %a{:href => "/dashboard#{@sessid ? "sessid=#{@sessid}" : ''}"}
+            -if @user
+                Logged in as #{@user.username} (
+                %a{:href => 'logout'} logout
+                )
+            -else
+                %form{:action => "/login", :method => "get"}
+                    %label{:for => 'username'} Username
+                    %input#username{:name => 'username', :type => 'text'}
+                    %label{:for => 'password'} Password
+                    %input#password{:name => 'password', :type => 'password'}
+                    %input{:type => 'submit', :value => 'login'}
 
         .content
             = yield
