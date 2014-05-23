@@ -26,7 +26,7 @@ class CatchPhrase < Sinatra::Base
   post '/get_catchphrases' do
     @username = params[:username]
     @results = ActiveRecord::Base.connection.execute(
-      "SELECT c.catchphrase FROM catchphrases AS c JOIN users AS u ON c.user_id = u.id WHERE u.username = '#{@username}'"
+      "SELECT c.catchphrase FROM catchphrases AS c JOIN users AS u ON c.user_id = u.id WHERE u.username = #{ActiveRecord::Base::sanitize(@username)}"
     )
     haml :index
   end
