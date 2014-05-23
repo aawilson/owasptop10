@@ -27,7 +27,7 @@
                     #{flash[:notice]}
             - if @extra_header_content
                 =@extra_header_content
-            %a{:href => "/dashboard#{@sessid ? "sessid=#{@sessid}" : ''}"}
+            %a{:href => "/dashboard"}
             -if @user
                 Logged in as #{@user.username} (
                 %a{:href => 'logout'} logout

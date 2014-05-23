@@ -20,8 +20,8 @@ class CatchPhrase < Sinatra::Base
   end
 
   def set_logged_in_user
-    if params[:userid]
-      @user = User.find_by_id(params[:userid].to_i)
+    if request.cookies['userid']
+      @user = User.find_by_id(request.cookies['userid'].to_i)
     end
   end
 
@@ -48,7 +48,8 @@ class CatchPhrase < Sinatra::Base
     user = User.find_by_username(username)
 
     if user and user.password == password
-      redirect to("/dashboard?userid=#{user.id}") and return
+      response.set_cookie 'userid', user.id
+      redirect to("/dashboard") and return
     end
 
     flash.now[:notice] =  "Sorry, username/password combination didn't match"
@@ -56,6 +57,7 @@ class CatchPhrase < Sinatra::Base
   end
 
   get '/logout' do
+    response.set_cookie 'userid', nil
     redirect to('/')
   end
 
