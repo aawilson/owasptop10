@@ -1,11 +1,13 @@
-/ @results: #{@results.inspect}
+/
+
+    ="@results: #{@results.inspect}"
 -if @results
     %p
         #{@username}'s catchphrases are:
         %ul
             - for result in @results
                 %li
-                    #{result[0]}
+                    #{result.catchphrase}
 
 %p
     %h

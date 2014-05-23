@@ -9,4 +9,7 @@ class User < ActiveRecord::Base
     write_attribute(:username, val.downcase)
   end
 
+  has_many :catchphrases
+
 end
+
