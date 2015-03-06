@@ -1,0 +1,14 @@
+message_to_wilson:
+    id: 1
+    user_id: 1
+    message: I am actually a shaved orangutan! Man I hope nobody ever sees this
+
+message_to_urkel:
+    id: 2
+    user_id: 2
+    message: Your show was way better than Fresh Prince
+
+message_to_seinfeld:
+    id: 3
+    user_id: 3
+    message: What is the deal with the Soup Nazi?

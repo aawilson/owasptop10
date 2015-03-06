@@ -4,10 +4,8 @@
 %p Your Birthdate: #{@user.birthdate}
 
 -unless @user.messages.empty?
-    %p Some fans left you messages while you were out!
+    %p
+        Some fans left you messages while you were out! Click
+        %a{:href => "list_messages/#{@user.id}"} here
+        to see them.
 
-    %ul
-        -@user.messages.each do |m|
-            %li
-                :escaped
-                    #{m.message}

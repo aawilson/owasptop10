@@ -19,15 +19,26 @@ class CatchPhrase < Sinatra::Base
     set_logged_in_user
   end
 
+  def require_auth
+    if @user.nil?
+      flash[:notice] = "Woops, can't go there without being logged in."
+      redirect to('/') and return
+    end
+  end
+
   def set_logged_in_user
-    if request.cookies['sessid']
+    p "set_logged_in_user"
+    unless request.cookies['sessid'].nil? || request.cookies['sessid'].empty?
+      p "  found cookie: #{request.cookies['sessid']}"
       @sessid = request.cookies['sessid']
       session = Session.find_by_sessid(@sessid)
       @all_users = User.all
       if session.nil?
+        p "that session is DEAD"
         response.set_cookie 'sessid', nil
       else
         @user = session.user
+        p "user set: #{@user.id} #{@user.username}"
       end
     end
   end
@@ -63,12 +74,20 @@ class CatchPhrase < Sinatra::Base
   end
 
   get '/dashboard' do
-    if @user.nil?
-      flash[:notice] = "Woops, can't go there without being logged in."
+    require_auth
+    haml :dashboard
+  end
+
+  get '/list_messages/:for_user_id' do
+    require_auth
+    begin
+      @messages = User.find(params[:for_user_id]).messages
+    rescue ActiveRecord::RecordNotFound
+      flash[:notice] = "No user with that id"
       redirect to('/') and return
     end
 
-    haml :dashboard
+    haml :messages
   end
 
   post '/login' do

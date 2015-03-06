@@ -10,4 +10,15 @@ namespace :db do
     ActiveRecord::Migration.verbose = false
     ActiveRecord::Migrator.migrate("db/migrate")
   end
+
+  desc "Load fixtures"
+  task(:load_fixtures => :environment) do
+    require 'active_record/fixtures'
+    Dir[File.join(File.dirname(__FILE__), 'db', 'migrate', 'fixtures', '*.yml')].each do |file|
+      ActiveRecord::Fixtures.create_fixtures(
+        File.dirname(file),
+        File.basename(file, ".yml")
+        )
+    end
+  end
 end

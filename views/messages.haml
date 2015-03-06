@@ -1,0 +1,8 @@
+%p Hello, #{@user.username}
+
+%p I present your messages, esteemed personage:
+
+-@messages.each do |m|
+    %li
+        :escaped
+            #{m.message}
