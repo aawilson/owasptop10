@@ -23,13 +23,12 @@
     %body
         .header
             /
-                @all_users: #{@all_users.inspect}
+                @alls: #{@all.inspect}
             - unless flash[:notice].nil?
                 #flash-notice
                     #{flash[:notice]}
             - if @extra_header_content
                 =@extra_header_content
-            %a{:href => "/dashboard#{@sessid ? "sessid=#{@sessid}" : ''}"}
             -if @user
                 Logged in as
                 %a{:href => 'dashboard'} #{@user.username}

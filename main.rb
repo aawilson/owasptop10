@@ -16,30 +16,18 @@ class CatchPhrase < Sinatra::Base
   register Sinatra::Flash
 
   before do
-    set_logged_in_user
-  end
-
-  def require_auth
-    if @user.nil?
-      flash[:notice] = "Woops, can't go there without being logged in."
-      redirect to('/') and return
+    @user = User.find_by_id(session[:user_id])
+    @all = {}
+    [User, Catchphrase, Message].each do |model|
+      @all[model.name] = model.all
     end
   end
 
-  def set_logged_in_user
-    p "set_logged_in_user"
-    unless request.cookies['sessid'].nil? || request.cookies['sessid'].empty?
-      p "  found cookie: #{request.cookies['sessid']}"
-      @sessid = request.cookies['sessid']
-      session = Session.find_by_sessid(@sessid)
-      @all_users = User.all
-      if session.nil?
-        p "that session is DEAD"
-        response.set_cookie 'sessid', nil
-      else
-        @user = session.user
-        p "user set: #{@user.id} #{@user.username}"
-      end
+  def require_auth
+    p "require_auth: #{@user.inspect}"
+    if @user.nil?
+      flash[:notice] = "Woops, can't go there without being logged in."
+      redirect to('/') and return
     end
   end
 
@@ -97,9 +85,7 @@ class CatchPhrase < Sinatra::Base
     user = User.find_by_username(username)
 
     if user and user.password == password
-      sessid = SecureRandom.hex(32)
-      Session.create(:user => user, :sessid => sessid)
-      response.set_cookie 'sessid', sessid
+      session[:user_id] = user.id
       redirect to("/dashboard") and return
     end
 
@@ -108,9 +94,8 @@ class CatchPhrase < Sinatra::Base
   end
 
   get '/logout' do
-    session = Session.find_by_sessid(request.cookies['sessid'])
-    session.destroy unless session.nil?
-    response.set_cookie 'sessid', nil
+    session[:user_id] = nil
+    session.clear
     redirect to('/')
   end
 
@@ -131,5 +116,4 @@ trap(:INT) do
   end
 end
 
-Session.all.each{|s|s.destroy}
 server.run CatchPhrase, CatchPhraseAppOptions.webrick_options
