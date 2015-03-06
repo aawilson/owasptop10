@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   end
 
   has_many :catchphrases
+  has_many :messages
 
 end
 

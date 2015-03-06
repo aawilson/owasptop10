@@ -2,3 +2,10 @@
 
 %p Your SSN: #{@user.ssn}
 %p Your Birthdate: #{@user.birthdate}
+
+-unless @user.messages.empty?
+    %p Some fans left you messages while you were out!
+
+    %ul
+        -@user.messages.each do |m|
+            %li #{m.message}

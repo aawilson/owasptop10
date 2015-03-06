@@ -1,13 +1,23 @@
 /
 
     ="@results: #{@results.inspect}"
--if @results
+-if @username && !@results
+    %p
+        #{@username} doesn't have any catchphrases!
+-elsif @username
     %p
         #{@username}'s catchphrases are:
         %ul
             - for result in @results
                 %li
                     #{result.catchphrase}
+
+    %p
+        Leave a message for #{@username}!
+        %form{:action => :leave_message, :method => 'post'}
+            %input{:type => 'hidden', :name => 'for_user_id', :value => @queried_user.id}
+            %textarea{:name => 'message'}
+            %input{:type => 'submit', :value => 'Submit! OBEY!'}
 
 %p
     %h

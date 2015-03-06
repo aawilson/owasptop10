@@ -38,6 +38,23 @@ module CatchPhraseAppOptions
   self.module_eval do
     module_function :webrick_options
     public :webrick_options
+    module_function :webrick_options_ssl
+    public :webrick_options_ssl
+  end
+end
+
+module BadGuyAppOptions
+  def webrick_options
+    {
+      :Port => 8666,
+      :Logger => WEBrick::Log::new($stderr, WEBrick::Log::DEBUG),
+      :DocumentRoot => File.join(File.dirname(__FILE__), 'public'),
+    }
+  end
+
+  self.module_eval do
+    module_function :webrick_options
+    public :webrick_options
   end
 end
 

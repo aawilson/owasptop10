@@ -22,6 +22,8 @@
 
     %body
         .header
+            /
+                @all_users: #{@all_users.inspect}
             - unless flash[:notice].nil?
                 #flash-notice
                     #{flash[:notice]}
@@ -29,7 +31,9 @@
                 =@extra_header_content
             %a{:href => "/dashboard#{@sessid ? "sessid=#{@sessid}" : ''}"}
             -if @user
-                Logged in as #{@user.username} (
+                Logged in as
+                %a{:href => 'dashboard'} #{@user.username}
+                (
                 %a{:href => 'logout'} logout
                 )
             -else

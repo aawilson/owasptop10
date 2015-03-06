@@ -23,6 +23,7 @@ class CatchPhrase < Sinatra::Base
     if request.cookies['sessid']
       @sessid = request.cookies['sessid']
       session = Session.find_by_sessid(@sessid)
+      @all_users = User.all
       if session.nil?
         response.set_cookie 'sessid', nil
       else
@@ -38,7 +39,26 @@ class CatchPhrase < Sinatra::Base
   post '/get_catchphrases' do
     @username = params[:username]
 
-    @results = User.find_by_username(@username).catchphrases
+    @queried_user = User.find_by_username(@username)
+
+    unless @queried_user.nil?
+      @results = @queried_user.catchphrases
+    end
+
+    haml :index
+  end
+
+  post '/leave_message' do
+    message = params[:message]
+    for_user = User.find params[:for_user_id]
+
+    if for_user.nil?
+      flash[:notice] = "Whoops, couldn't find that user!"
+      redirect to('/') and return
+    else
+      Message.create(:user => for_user, :message => message)
+      flash.now[:notice] = "Sent the message! Feel proud!"
+    end
     haml :index
   end
 
@@ -47,6 +67,7 @@ class CatchPhrase < Sinatra::Base
       flash[:notice] = "Woops, can't go there without being logged in."
       redirect to('/') and return
     end
+
     haml :dashboard
   end
 
@@ -72,6 +93,11 @@ class CatchPhrase < Sinatra::Base
     session.destroy unless session.nil?
     response.set_cookie 'sessid', nil
     redirect to('/')
+  end
+
+  get '/clear_all_messages' do
+    Message.all.each { |m| m.destroy}
+    haml :index
   end
 
 end
