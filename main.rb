@@ -68,8 +68,15 @@ class CatchPhrase < Sinatra::Base
 
   get '/list_messages/:for_user_id' do
     require_auth
+
     begin
-      @messages = User.find(params[:for_user_id]).messages
+      queried_user = User.find(params[:for_user_id])
+      unless @user.is_allowed_to_see_messages_for queried_user
+        flash[:notice] = "You are not allowed to see those messages! BACK OFF"
+        redirect to('/dashboard') and return
+      end
+
+      @messages = queried_user.messages
     rescue ActiveRecord::RecordNotFound
       flash[:notice] = "No user with that id"
       redirect to('/') and return

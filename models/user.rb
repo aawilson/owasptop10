@@ -5,8 +5,12 @@ class User < ActiveRecord::Base
     :uniqueness => true
   }
 
-  def username=(val)
+  def username= val
     write_attribute(:username, val.downcase)
+  end
+
+  def is_allowed_to_see_messages_for other_user
+    other_user.id == self.id
   end
 
   has_many :catchphrases
