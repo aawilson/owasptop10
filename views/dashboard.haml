@@ -8,4 +8,6 @@
 
     %ul
         -@user.messages.each do |m|
-            %li #{m.message}
+            %li
+                :escaped
+                    #{m.message}

@@ -24,5 +24,5 @@
         Catchphrase Engine!
 %p
     %form{:action => :get_catchphrases, :method => 'post'}
-        %input{:type => 'text', :name => 'username'}
+        %input{:type => 'text', :name => 'username', :value => @username}
         %input{:type => 'submit', :value => 'Get Catchphrases!'}
